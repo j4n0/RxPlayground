@@ -98,10 +98,16 @@ exampleOf("Filter: distinctUntilChanged")
     Observable.of(1,2,2,1,3).distinctUntilChanged().subscribe { print($0) } // 1 2 1 3
 }
 
+exampleOf("Filter: takeWhile")
+{
+    // takeWhile wmits events until the condition is false
+    Observable.of(1,2,3,4).takeWhile { $0<3 }.subscribe { print($0) } // 1 2
+}
+
 exampleOf("Combine: startWith")
 {
     // startWith causes a sequence to start emitting certain events before its own events.
-    Observable.of(2,3).startWith(1).subscribe { print($0) } // 1 2 3
+    Observable.of(2,3).startWith(1).startWith(8,9).subscribe { print($0) } // 8 9 1 2 3
 }
 
 exampleOf("Combine: merge")
@@ -110,7 +116,7 @@ exampleOf("Combine: merge")
     // This example subscribe to the result of merging two subjects.
     let s1 = PublishSubject<Int>()
     let s2 = PublishSubject<Int>()
-    Observable.of(s1, s2).merge().subscribe { print($0) }
+    Observable.of(s1, s2).merge().subscribe { print($0) } // 20 40 60 1 80 2 100
     s1.onNext(20)
     s1.onNext(40)
     s1.onNext(60)
@@ -124,5 +130,21 @@ exampleOf("Combine: zip")
 {
     // zip takes two sequences and returns pair of elements, where each pair has an element from each sequence.
     // It will produce as many elements as the number of elements in the shortest sequence.
-    Observable.zip(Observable.of(1,2,3,4,5), Observable.of("a","b","c")).subscribe { print($0) } // 1a 2b 3c
+    Observable.zip(Observable.of(1,2,3,4,5), Observable.of("a","b","c")).subscribe { print($0) } // (1,a) (2,b) (3,c)
+    
+    let strings = PublishSubject<String>()
+    let ints = PublishSubject<Int>()
+    Observable.zip(strings, ints) { string, integer in "\(string)\(integer)" }.subscribe { print($0) } // A1 B2
+    strings.onNext("A")
+    strings.onNext("B")
+    ints.onNext(1)
+    ints.onNext(2)
+    strings.onNext("C")
+}
+
+exampleOf("Side effects: do(onNext:)")
+{
+    // Performs an action when a next event happens.
+    // There is also do(onError:) and do(onCompleted:).
+    _ = Observable.of(1,2,3,4,5).do(onNext: { e in print("x") }).subscribe { print($0) }
 }
