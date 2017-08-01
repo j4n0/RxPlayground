@@ -1,6 +1,7 @@
 
 import RxSwift
 
+
 exampleOf("Create observable sequences")
 {
     _ = Observable.from([0,1,2,3,4,5])             // from array
@@ -20,6 +21,7 @@ exampleOf("Create observable sequences")
     enum Cake: Error { case burnt }
     _ = Observable<Int>.error(Cake.burnt).subscribe { print($0) }
 }
+
 
 exampleOf("Different ways to write the subscribe method")
 {
@@ -50,6 +52,7 @@ exampleOf("Different ways to write the subscribe method")
     })
 }
 
+
 exampleOf("Cancel the subscription")
 {
     // subscribe and cancel the subscription on deinit
@@ -64,3 +67,43 @@ exampleOf("Cancel the subscription")
         .dispose()
 
 }
+
+
+exampleOf("Observable<type>.create")
+{
+    // creates an observable and specify the events it will fire
+    let bag = DisposeBag()
+    _ = Observable<String>.create { observer in
+            observer.onNext("1")
+            observer.onCompleted()
+            return Disposables.create()
+        }
+        .subscribe { print($0) }
+        .disposed(by: bag)
+    
+    // if you want to terminate with an error, create one: enum MyError: Error { case anError }
+    // and send it: observer.onError(MyError.anError)
+}
+
+exampleOf("Observable<type>.create")
+{
+    // creates a factory of observables that returns a different one on each call
+    let bag = DisposeBag()
+    var flip = false
+    let factory: Observable<Int> = Observable.deferred {
+        flip = !flip
+        return flip ? Observable.of(1,2,3) : Observable.of(4,5,6)
+    }
+    for _ in 0...3 {
+        factory.subscribe { print($0) }.disposed(by: bag)
+    }
+}
+
+
+
+
+
+
+
+
+
