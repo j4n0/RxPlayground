@@ -65,7 +65,6 @@ exampleOf("Cancel the subscription")
     _ = Observable.just("Turtle")
         .subscribe { print($0) }
         .dispose()
-
 }
 
 
@@ -85,7 +84,8 @@ exampleOf("Observable<type>.create")
     // and send it: observer.onError(MyError.anError)
 }
 
-exampleOf("Observable<type>.create")
+
+exampleOf("Observable.deferred")
 {
     // creates a factory of observables that returns a different one on each call
     let bag = DisposeBag()
