@@ -32,11 +32,12 @@ PlaygroundPage.current.liveView = imageView
       imageDataSubject.observeOn(scheduler)...
 
   And here is another, this time using a NSOperationQueue running on the background.
- 
-      let queue = NSOperationQueue()
-      queue.qualityOfService = .background
-      let scheduler = OperationQueueScheduler(operationQueue: queue)
-      imageDataSubject.observeOn(scheduler)...
+
+    let operationQueue = NSOperationQueue()
+    operationQueue.maxConcurrentOperationCount = 3
+    operationQueue.qualityOfService = NSQualityOfService.UserInitiated
+    let backgroundWorkScheduler = OperationQueueScheduler(operationQueue: operationQueue)
+    imageDataSubject.observeOn(scheduler)...
 */
 
 

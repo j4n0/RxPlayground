@@ -98,12 +98,3 @@ exampleOf("Observable.deferred")
         factory.subscribe { print($0) }.disposed(by: bag)
     }
 }
-
-
-
-
-
-
-
-
-

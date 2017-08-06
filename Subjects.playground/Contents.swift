@@ -64,5 +64,11 @@ exampleOf("Variable")
         variable.value.onCompleted()
         variable.asObservable().onCompleted()
     */
+    
+    let a = Variable(1)
+    let b = Variable(1)
+    let c = Observable.combineLatest(a.asObservable(), b.asObservable()) { $0 + $1 }
+    c.subscribe { print("c = \($0)") }
+    a.value = 10
 }
 
