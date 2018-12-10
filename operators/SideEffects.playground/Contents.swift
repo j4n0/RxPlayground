@@ -22,7 +22,7 @@ exampleOf("Side effects: debug")
                 .debug("button tap")
                 .scan(0) { (priorValue, _) in return priorValue + 1 }
                 .subscribe(onNext: { [unowned self] counter in self.buzz(times: counter) })
-                .addDisposableTo(bag)
+				.disposed(by: bag)
         }
         func buzz(times: Int){ print("you tapped \(times) times") }
     }

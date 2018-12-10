@@ -7,7 +7,7 @@ import PlaygroundSupport
 
 // print the element if there is one, or else an error if there is one, or else the event itself
 func print<T: CustomStringConvertible>(label: String, event: Event<T>) {
-    print(label, event.element ?? event.error ?? event)
+    print(label, event)
 }
 
 exampleOf("UITextField")
@@ -17,7 +17,7 @@ exampleOf("UITextField")
     UITextField().rx.text
         .debounce(0.3, scheduler: MainScheduler.instance)
         .subscribe { print("validate \($0)") }
-        .addDisposableTo(bag)
+		.disposed(by: bag)
 }
 
 exampleOf("Driver button to label")
@@ -33,7 +33,7 @@ exampleOf("Driver button to label")
                 .asDriver(onErrorJustReturn: 0)
                 .map { currentCount in return "You have tapped that button \(currentCount) times." }
                 .drive(self.label.rx.text)
-                .addDisposableTo(bag)
+				.disposed(by: bag)
         }
     }
 }
@@ -69,10 +69,10 @@ exampleOf("Notification")
     {
         public override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
-            _ = NotificationCenter.default.rx
-                .notification(NSNotification.Name.UIKeyboardDidShow)
-                .takeUntil(rx.methodInvoked(#selector(viewWillDisappear(_:)))) // automatically disposes when viewWillDisappear is invoked
-                .subscribe{ notification in print(notification) }
+//            _ = NotificationCenter.default.rx
+//				.notification(NSNotification.Name.UIResponder.keyboardDidShowNotification) // change
+//                .takeUntil(rx.methodInvoked(#selector(viewWillDisappear(_:)))) // automatically disposes when viewWillDisappear is invoked
+//                .subscribe{ notification in print(notification) }
         }
     }
 }

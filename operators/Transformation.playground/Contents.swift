@@ -73,7 +73,8 @@ exampleOf("Transformation: mapWithIndex")
     // Other operators also have a WithIndex variant.
     _ = Observable<Int>
         .of(1,2,3)
-        .mapWithIndex { index, integer in return integer * 10 }
+        .enumerated()
+		.map { index, integer in return integer * 10 }
         .subscribe { print($0) } // 10 20 30
 }
 

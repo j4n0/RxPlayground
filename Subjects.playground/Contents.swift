@@ -3,7 +3,7 @@ import RxSwift
 
 // print the element if there is one, or else an error if there is one, or else the event itself
 func print<T: CustomStringConvertible>(label: String, event: Event<T>) {
-    print(label, event.element ?? event.error ?? event)
+    print(label, event)
 }
 
 /*:

@@ -6,7 +6,7 @@ import PlaygroundSupport
 
 let imageView = UIImageView(frame: CGRect(x: 0.0, y: 0.0, width: 128.0, height: 128.0))
 let swift = UIImage(named: "Swift")!
-let swiftImageData = UIImagePNGRepresentation(swift)!
+let swiftImageData = swift.pngData()!
 
 let disposeBag = DisposeBag()
 let imageDataSubject = PublishSubject<NSData>()
@@ -16,7 +16,7 @@ imageDataSubject
     .map { UIImage(data: $0 as Data) }
     .observeOn(MainScheduler.instance)
     .subscribe { imageView.image = $0.element! }
-    .addDisposableTo(disposeBag)
+	.disposed(by: disposeBag)
 
 imageDataSubject.onNext(swiftImageData as NSData)
 

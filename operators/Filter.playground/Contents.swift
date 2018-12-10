@@ -11,7 +11,7 @@ exampleOf("Filter: debounce")
         .asDriver()
         .throttle(2)
         .drive(onNext: { (_) in print("Tap!") })
-        .addDisposableTo(bag)
+		.disposed(by: bag)
 }
 
 exampleOf("Filter: distinctUntilChanged")
@@ -100,6 +100,6 @@ exampleOf("Filter: throttle")
         .asDriver()
         .throttle(2)
         .drive(onNext: { (_) in print("Tap!") })
-        .addDisposableTo(bag)
+		.disposed(by: bag)
 }
 

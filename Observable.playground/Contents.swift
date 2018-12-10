@@ -59,7 +59,7 @@ exampleOf("Cancel the subscription")
     let bag = DisposeBag()
     _ = Observable.just("Hello")
         .subscribe (onNext:{ print($0) })
-        .addDisposableTo(bag)
+		.disposed(by: bag)
     
     // subscribe and cancel the subscription
     _ = Observable.just("Turtle")
