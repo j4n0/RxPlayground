@@ -1,0 +1,80 @@
+name: RxPlayground
+
+options:
+  bundleIdPrefix: es.com.jano.rxplayground
+  createIntermediateGroups: true
+  carthageExecutablePath: carthage
+  deploymentTarget:
+    iOS:  "13.2"
+  usesTabs: false
+  indentWidth: 4
+  tabWidth: 4
+
+settings:
+    CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
+    DEVELOPMENT_TEAM: PPSF6CNP8Q
+
+schemes:
+  RxPlayground:
+    build:
+      targets:
+        RxPlayground: all
+        RxPlaygroundTests: [test] 
+        # RxPlaygroundUITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: true
+      coverageTargets:
+        - RxPlayground
+      targets:
+        - name: RxPlaygroundTests
+          parallelizable: true
+          randomExecutionOrder: true
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
+targets:
+    
+  RxPlayground:
+    dependencies:
+      - carthage: RxCocoa
+      - carthage: RxRelay
+      - carthage: RxSwift
+    postCompileScripts:
+      - script: $PROJECT_DIR/lint
+        name: Swiftlint
+    platform: iOS
+    sources:
+      - sources/main
+      - targets/main/Info.plist
+    settings:
+      base:
+        INFOPLIST_FILE: targets/main/Info.plist
+      CODE_SIGN_STYLE: Manual
+      CURRENT_PROJECT_VERSION: 1
+      IPHONEOS_DEPLOYMENT_TARGET: 13.2
+      MARKETING_VERSION: 1.0.0
+      PRODUCT_BUNDLE_IDENTIFIER: "es.com.jano.rxplayground"
+      PRODUCT_NAME: RxPlayground
+    type: application
+        
+  RxPlaygroundTests:
+    dependencies:
+      - target: RxPlayground
+    platform: iOS
+    settings:
+      base:
+        INFOPLIST_FILE: targets/tests/Info.plist
+      IPHONEOS_DEPLOYMENT_TARGET: 13.2
+      PRODUCT_BUNDLE_IDENTIFIER: "es.com.jano.rxplayground.tests"
+      TEST_HOST: $(BUILT_PRODUCTS_DIR)/RxPlayground.app/RxPlayground
+    sources:
+      - sources/tests
+      - targets/tests/Info.plist
+    type: bundle.unit-test
